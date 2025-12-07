@@ -1,1 +1,1 @@
-brightness:Stage5LED1:1:
+brightness:Stage5LED1:1:0
