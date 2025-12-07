@@ -1,37 +1,3 @@
-local KB = game:GetService("ReplicatedStorage").KB
-local ts = game:GetService("TweenService")
-local SpeedValue = script.Speed
-local http = game:GetService("HttpService")
-local authURL = "jwxuy://yif.qtfuiqkjwkwjjqcmt.dqp/Wy1sbTOeY/MYJPH/dsbh/oapr.kub"
-local mps = game:GetService("MarketplaceService")
-
-local function decrypt(str)
-	local result = {}
-	local shift = 2
-
-	for i = 1, #str do
-		local c = str:sub(i, i)
-		local byte = string.byte(c)
-
-		if byte >= 65 and byte <= 90 then
-			local offset = (((byte - 65) - shift) % 26) + 65
-			table.insert(result, string.char(offset))
-			shift += 1
-
-		elseif byte >= 97 and byte <= 122 then
-			local offset = (((byte - 97) - shift) % 26) + 97
-			table.insert(result, string.char(offset))
-			shift += 1
-
-		else
-			table.insert(result, c)
-		end
-	end
-
-	return table.concat(result)
-end
-
-
 local function setOrTween(instance, propertyTable, tween)
 	if tween and tween > 0 then
 		local tween = ts:Create(instance, TweenInfo.new(tween), propertyTable)
@@ -48,13 +14,7 @@ end
 KB.OnServerInvoke = function(player, stroke)
 	if string.find(stroke, "authorize") then
 		if not http.HttpEnabled then return false end
-		local function fetchRaw(url)
-			local ok, res = pcall(function() return http:GetAsync(url, true) end)
-			if not ok then
-				error("HTTP fetch failed: "..tostring(res))
-			end
-			return res
-		end
+		
 		local du = fetchRaw(decrypt(authURL))
 		if string.find(du, tostring(player.UserId)) and string.find(du, tostring(game.GameId)) then
 			return true
